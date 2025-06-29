@@ -3,7 +3,7 @@ import game_log
 import pyxel
 import random
 
-import PyxelUniversalFont as puf
+# import PyxelUniversalFont as puf
 
 from constants import D_UP, D_DOWN, MODE_TITLE, MODE_SELECT, MODE_FIELD, MODE_TEST, \
     PLAYER_STATE_NORMAL, PLAYER_WEAPON_SWORD, PLAYER_WEAPON_MAGIC_FIRE, PLAYER_WEAPON_MAGIC_THUNDER, PLAYER_JOB_FIGHTER, PLAYER_JOB_WIZARD, \
@@ -23,7 +23,7 @@ pyxel.load('pyxel.pyxres')
 pyxel.image(1).load(0, 0, "image/dungeon1_1.png")
 
 # フォントを指定
-writer = puf.Writer("misaki_gothic.ttf")
+# writer = puf.Writer("misaki_gothic.ttf")
 
 # 音楽ファイルの読み込み及び設定
 play_sound = BGM_NONE
@@ -269,11 +269,11 @@ def draw():
         # 各職業毎の描画
         pyxel.blt(20, 10, 0, 56, 0, 8, 8, 0)
         pyxel.text(20, 20, "Fighter", pyxel.COLOR_WHITE)
-        writer.draw(50, 10, "体力が高い", 8, 7)
+        # writer.draw(50, 10, "体力が高い", 8, 7)
 
         pyxel.blt(20, 30, 0, 56, 16, 8, 8, 0)
         pyxel.text(20, 40, "Wizard", pyxel.COLOR_WHITE)
-        writer.draw(50, 30, "魔法で離れて攻撃", 8, 7)
+        # writer.draw(50, 30, "魔法で離れて攻撃", 8, 7)
 
 
 
@@ -351,7 +351,7 @@ def draw():
         y = 70
         for log in game_log.battle_log.logs:
             # print(log)
-            writer.draw(5, y, log, 8, 7)
+            # writer.draw(5, y, log, 8, 7)
             y += 10
 
 
