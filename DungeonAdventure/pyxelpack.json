@@ -1,0 +1,7 @@
+{
+  "title": "DungeonAdventures",
+  "assets": [
+    "assets/misaki_gothic.bdf"
+  ],
+  "start": "main_web.py"
+}
