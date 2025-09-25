@@ -340,3 +340,4 @@ class CampSceneWindow:
         #下部に景色の描画、今は特に代わりを表示
         pyxel.blt(base_x, pyxel.height-16, 2, 0, 72, 16, 16, 0, 0, 2.0)
         pyxel.blt(base_x+14, pyxel.height-16, 2, 16, 72, 16, 16, 0, 0, 2.0)
+        pyxel.blt(base_x+28, pyxel.height-16, 2, 32, 72, 16, 16, 0, 0, 2.0)

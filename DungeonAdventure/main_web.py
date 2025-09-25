@@ -480,7 +480,7 @@ def draw():
     if game_mode== MODE_TITLE:
         pyxel.blt(0, 0, 1, 0, 0, 128, 128)  # 画像を表示
         pyxel.text(20, 30, "  plz hit space key   ", pyxel.frame_count % 16)  # メッセージ
-        pyxel.text(20, 70, "  ver.1.30 build.4    ", pyxel.frame_count % 16)  # メッセージ
+        pyxel.text(20, 70, "  ver.1.30 build.5 ", pyxel.frame_count % 16)  # メッセージ
         # draw_text_with_border(20, 50, "キーをおしてください", pyxel.COLOR_WHITE, pyxel.COLOR_BLACK, systemfont)
         prologue.draw()
 
