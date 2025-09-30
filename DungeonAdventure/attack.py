@@ -63,11 +63,15 @@ class Attack:
         self.exp = 0
 
     def add_exp(self, base_exp=1):
-        if self.exp < self.get_next_level_exp():
-            modifier = get_sin_modifier("嫉妬","weapon_mastery_gain")
-            gained_exp = max(base_exp, round(base_exp * modifier))
+        # if self.exp < self.get_next_level_exp():
+        #     modifier = get_sin_modifier("嫉妬","weapon_mastery_gain")
+        #     gained_exp = max(base_exp, round(base_exp * modifier))
+        #
+        # self.exp += gained_exp
+        modifier = get_sin_modifier("嫉妬","weapon_mastery_gain")
+        gained_exp = max(base_exp, round(base_exp * modifier))
 
-            self.exp += gained_exp
+        self.exp += gained_exp
 
     def reset(self):
         self.reset_traits()
@@ -119,16 +123,16 @@ class Attack:
                 self.traits["攻撃力"] = self.traits.get("攻撃力", 0) + 30
                 self.traits["速度"] = self.traits.get("速度", 0) + 1
             elif self.name == WEAPON_NAME_KNIFE:
-                self.traits["攻撃力"] = self.traits.get("攻撃力", 0) + 10
+                self.traits["攻撃力"] = self.traits.get("攻撃力", 0) + 5
                 self.traits["範囲"] = self.traits.get("範囲", 0) + 1
             elif self.name == WEAPON_NAME_ARROW:
-                self.traits["攻撃力"] = self.traits.get("攻撃力", 0) + 30
+                self.traits["攻撃力"] = self.traits.get("攻撃力", 0) + 20
             elif self.name == WEAPON_NAME_CRAW:
-                self.traits["攻撃力"] = self.traits.get("攻撃力", 0) + 15
+                self.traits["攻撃力"] = self.traits.get("攻撃力", 0) + 7
                 self.traits["範囲"] = self.traits.get("範囲", 0) + 1
                 self.traits["速度"] = self.traits.get("速度", 0) + 1
             elif self.name == WEAPON_NAME_THROWING_KNIFE:
-                self.traits["攻撃力"] = self.traits.get("攻撃力", 0) + 7
+                self.traits["攻撃力"] = self.traits.get("攻撃力", 0) + 5
                 self.traits["範囲"] = self.traits.get("範囲", 0) + 1
 
             # 攻撃力の強化
@@ -161,8 +165,8 @@ class Attack:
             AttackType.SHOCKWAVE: 4,
             AttackType.FAN_FIRE: 3,
             AttackType.AREA_MAGIC: 1,
-            AttackType.PROJECTILE: 6,
-            AttackType.PROJECTILE_RANDOM: 6,
+            AttackType.PROJECTILE: 3,
+            AttackType.PROJECTILE_RANDOM: 2,
             AttackType.SPIN_SLASH: 2,
             AttackType.BEAM: 3,
             AttackType.THRUST: 6,
