@@ -324,16 +324,6 @@ def update():
             center_x = pyxel.width // 2
             center_y = pyxel.height // 2
 
-            # if 0 <= pyxel.mouse_x <= 8 and \
-            #         116 <= pyxel.mouse_y <= 126:
-            #     if attack.attack_type == AttackType.MELEE:
-            #         attack = attack_fire
-            #     elif attack.attack_type == AttackType.SHOCKWAVE:
-            #         attack = attack_thunder
-            #     elif attack.attack_type == AttackType.AREA_MAGIC:
-            #         attack = attack_sword
-            #     return
-
             if not mouse_drag_control:
                 # マウスの位置から、主人公（画面中央）との相対位置を計算
                 dx = pyxel.mouse_x - center_x
@@ -359,9 +349,25 @@ def update():
         closest_dist_sq = float('inf')
         closest_angle = None
 
+        # for e in enemies:
+        #     e.update()
+        #     # プレイヤーと現在の敵の距離の2乗を計算
+        #     dist_sq = (e.x - simpleplayer.x) ** 2 + (e.y - simpleplayer.y) ** 2
+        #
+        #     # 既存の最も近い距離よりも近ければ、情報を更新
+        #     if dist_sq < closest_dist_sq:
+        #         closest_dist_sq = dist_sq
+        #         closest_angle = math.atan2(e.y - simpleplayer.y, e.x - simpleplayer.x)
+        #
+        # enemies = [e for e in enemies if e.is_alive()]
+
+        # 予め、デスポーン距離の2乗を定義しておく
+        DESPAWN_DIST_SQ = 100 ** 2
+
+        # ループ内で敵のアップデートと、最も近い敵の特定を行う
         for e in enemies:
             e.update()
-            # プレイヤーと現在の敵の距離の2乗を計算
+            # 距離計算はデスポーン判定のために必須
             dist_sq = (e.x - simpleplayer.x) ** 2 + (e.y - simpleplayer.y) ** 2
 
             # 既存の最も近い距離よりも近ければ、情報を更新
@@ -369,7 +375,13 @@ def update():
                 closest_dist_sq = dist_sq
                 closest_angle = math.atan2(e.y - simpleplayer.y, e.x - simpleplayer.x)
 
-        enemies = [e for e in enemies if e.is_alive()]
+        # --- 距離と生存フラグでリストをフィルタリング（デスポーン処理） ---
+        enemies = [
+            e for e in enemies
+            if e.is_alive() and  # 死亡していない
+               ((e.x - simpleplayer.x) ** 2 + (e.y - simpleplayer.y) ** 2) <= DESPAWN_DIST_SQ  # プレイヤーからデスポーン距離内にいる
+        ]
+
         # ループ終了後、最終的な角度をsimpleplayerに代入
         if closest_angle is not None:
             simpleplayer.near_enemy_angle = closest_angle
@@ -480,7 +492,7 @@ def draw():
     if game_mode== MODE_TITLE:
         pyxel.blt(0, 0, 1, 0, 0, 128, 128)  # 画像を表示
         pyxel.text(20, 30, "  plz hit space key   ", pyxel.frame_count % 16)  # メッセージ
-        pyxel.text(20, 70, "  ver.1.30 build.5 ", pyxel.frame_count % 16)  # メッセージ
+        pyxel.text(20, 70, "  ver.1.30 build.6  ", pyxel.frame_count % 16)  # メッセージ
         # draw_text_with_border(20, 50, "キーをおしてください", pyxel.COLOR_WHITE, pyxel.COLOR_BLACK, systemfont)
         prologue.draw()
 
@@ -503,19 +515,30 @@ def draw():
 
     elif game_mode== MODE_FIELD:
 
-        # カメラを動的に表示するエリア
         pyxel.camera(simpleplayer.x - pyxel.width // 2, simpleplayer.y - pyxel.height // 2)
 
-        pyxel.bltm(0, 0, 0, 0, 0, 320, 200)
-        simpleplayer.draw()
-        for enemy in enemies:
-            if enemy.is_alive():
-                enemy.draw()
-        attack.player_attack.draw()
-        if attack.player_attack_sub:
-            attack.player_attack_sub.draw()
+        touch_area_width,touch_area_height = 100,100
 
-        drop_item_manager.draw()
+        pyxel.dither(0.0)
+        pyxel.bltm(0, 0, 0, 0, 0, 320, 200)
+        draw_game_objects()
+        pyxel.camera(0, 0)
+        pyxel.clip(pyxel.width // 2 - touch_area_width //2, pyxel.height // 2 - touch_area_height //2, touch_area_width, touch_area_height)
+
+        touch_area_width,touch_area_height = 50,50
+        pyxel.dither(0.6)
+        pyxel.camera(simpleplayer.x - pyxel.width // 2, simpleplayer.y - pyxel.height // 2)
+        pyxel.bltm(0, 0, 0, 0, 0, 320, 200)
+        draw_game_objects()
+        pyxel.camera(0, 0)
+        pyxel.clip(pyxel.width // 2 - touch_area_width //2, pyxel.height // 2 - touch_area_height //2, touch_area_width, touch_area_height)
+
+        pyxel.dither(1.0)  # ディザリングを解除
+        pyxel.camera(simpleplayer.x - pyxel.width // 2, simpleplayer.y - pyxel.height // 2)
+        pyxel.bltm(0, 0, 0, 0, 0, 320, 200)
+        draw_game_objects()
+
+        pyxel.clip()
 
         # カメラを固定で表示するエリア
         pyxel.camera(0,0)
@@ -598,6 +621,7 @@ def draw():
         simple_window_status_ui.StatusWindow.draw()
         # WeaponLevelUpWindow.draw()
 
+
     elif game_mode == MODE_DEAD:
         pyxel.camera(simpleplayer.x - pyxel.width // 2, simpleplayer.y - pyxel.height // 2)
         pyxel.bltm(0, 0, 0, 0, 0, 320, 200)
@@ -615,6 +639,17 @@ def draw():
     #     pyxel.text(10, 20, f"frame: {last_frame}", 7)
     # else:
     #     pyxel.text(10, 10, "none", 6)
+
+
+def draw_game_objects():
+    simpleplayer.draw()
+    for enemy in enemies:
+        if enemy.is_alive():
+            enemy.draw()
+    attack.player_attack.draw()
+    if attack.player_attack_sub:
+        attack.player_attack_sub.draw()
+    drop_item_manager.draw()
 
 
 # ゲーム実行
