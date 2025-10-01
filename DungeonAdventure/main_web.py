@@ -394,8 +394,13 @@ def update():
             if enemy_spawn_timer % spawn_interval == 0:
                 while True:
                     enemy_types = get_current_enemy_list()
-                    new_enemy = SimpleEnemy(random.randint(16, 320),
-                                            random.randint(16, 200),
+                    # new_enemy = SimpleEnemy(random.randint(16, 320),
+                    #                         random.randint(16, 200),
+                    #                         random.choice(enemy_types),
+                    #                         target=simpleplayer,
+                    #                         drop_item=drop_item_manager)
+                    new_enemy = SimpleEnemy(random.randint(int(min(16, simpleplayer.x - 100)), int(min(320,simpleplayer.x + 100))),
+                                            random.randint(int(min(16, simpleplayer.y - 100)), int(min(320,simpleplayer.y + 100))),
                                             random.choice(enemy_types),
                                             target=simpleplayer,
                                             drop_item=drop_item_manager)
@@ -492,7 +497,7 @@ def draw():
     if game_mode== MODE_TITLE:
         pyxel.blt(0, 0, 1, 0, 0, 128, 128)  # 画像を表示
         pyxel.text(20, 30, "  plz hit space key   ", pyxel.frame_count % 16)  # メッセージ
-        pyxel.text(20, 70, "  ver.1.30 build.6  ", pyxel.frame_count % 16)  # メッセージ
+        pyxel.text(20, 70, "  ver.1.30 build.7  ", pyxel.frame_count % 16)  # メッセージ
         # draw_text_with_border(20, 50, "キーをおしてください", pyxel.COLOR_WHITE, pyxel.COLOR_BLACK, systemfont)
         prologue.draw()
 

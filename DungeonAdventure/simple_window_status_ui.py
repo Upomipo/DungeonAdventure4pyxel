@@ -36,11 +36,13 @@ class SimpleStatus:
 
                         # 修正：変換したリストのインデックスを使ってキーを取得
                         next_key = key_list[next_index]
-                        next_sub_key = key_list[(next_index+1)%len(key_list)]
-
                         # 取得したキーを使って辞書から次の攻撃を取得
                         attack.player_attack = self.player.attacks[next_key]
-                        attack.player_attack_sub = self.player.attacks[next_sub_key]
+
+                        if self.player.job == PLAYER_JOB_THIEF:
+                            next_sub_key = key_list[(next_index+1)%len(key_list)]
+                            attack.player_attack_sub = self.player.attacks[next_sub_key]
+
 
                         break
 
